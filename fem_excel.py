@@ -2,12 +2,15 @@ import openpyxl
 from fem_MagSize import model_size
 import sys
 import numpy as np
-import pandas as pd
+# import pandas as pd
+import time
 
 
 class Counter():
     StopCount = 0
     BackUpCount = False
+    u = time.gmtime()
+    last_date = str(u.tm_year)+"/"+str(u.tm_mon)+"/"+str(u.tm_mday)
 
 
 class Workbook():
@@ -185,100 +188,7 @@ def E_sub(result, comment):
     print(comment+"保存完了")
 
 
-def E2_org(sheet, WS=False):
-    if WS == False:
-        wb = openpyxl.load_workbook(wk.book)
-        ws = wb[sheet]
-    else:
-        ws = WS
-    ws.insert_cols(1, 5)
-    StopExit()
-    if WS == False:
-        wb.save(wk.book)
-    print(sheet+"整理完了")
-
-
-def E2_comment(sheet, comment):
-    wb = openpyxl.load_workbook(wk.book)
-    ws = wb[sheet]
-
-    p = 1
-    while not ws.cell(p, 1).value is None:
-        p += 1
-    p += 1
-    while not ws.cell(p, 1).value is None:
-        p += 1
-    ws.cell(p, 1).value = comment
-    wb.save(wk.book)
-    E_BackUp(comment, True)
-    print(comment+"完了")
-
-
-def E2_check(sheet, model):
-    wb = openpyxl.load_workbook(wk.book)
-    ws = wb["check"]
-    ws2 = wb[sheet]
-    q = 1
-    p = 1
-
-    if ws.cell(p, q).value is None:
-        ws.cell(p, q).value = sheet
-
-    while not ws.cell(p, q).value is None:
-        p += 1
-    if ws2.cell(p, q).value is None:
-        p += 1
-        ws.cell(p, q).value = ws2.cell(p, q+5).value
-        E2_org("check", ws)
-        wb.save(wk.book)
-        E2_check(sheet, model)
-        return
-    else:
-        ws.cell(p, q).value = ws2.cell(p, q).value
-        q += 1
-        for i in model:
-            if model[i] != check_model[i]:
-                ws.cell(p, q).value = i+":"+str(model[i])
-                q += 1
-
-    wb.save(wk.book)
-
-
-def ExcelMain2(result, subj, var):
-    wb = openpyxl.load_workbook(wk.book)
-    ws = wb[var]
-
-    p = 1
-    q = 1
-
-    if ws.cell(p, q).value is None:
-        ws.cell(p, q).value = "mm"
-        ws.cell(p, q+1).value = "x"
-        ws.cell(p, q+2).value = "y"
-        ws.cell(p, q+3).value = "z"
-        if subj == "mag_num":
-            ws.cell(p, q).value = "num"
-
-    while not ws.cell(p, q).value is None:
-        p += 1
-
-    ws.cell(p, q).value = subj
-    for i in result:
-        q += 1
-        ws.cell(p, q).value = i
-
-    wb.save(wk.book)
-    print(var + str(subj)+"mm"+"保存完了")
-
-
-def E2main(result, model, var):
-    ExcelMain2(result, model[var], var)
-    E_BackUp(result, model[var])
-    E2_check(var, model)
-    E2_number(var)
-
-
-def E2_org2(sheet, C, m):
+def E2_org2(sheet, C, m):  # 上下のデータを交互に入れる
     wb = openpyxl.load_workbook(wk.book)
     ws = wb[sheet]
     while C <= m:
@@ -347,7 +257,126 @@ def E2_org2(sheet, C, m):
     print(sheet+"整理完了")
 
 
-def E2_number(sheet, load_book=False):
+def E2_org3():  # 行を上下反転
+    wb = wb = openpyxl.load_workbook("koma_sim2_py.xlsx")
+    ws = wb["mesh"]
+
+    p = 2
+    q = 4
+    MoveData = []
+    while not ws.cell(p, q).value is None:
+        MoveData.insert(0, ws.cell(p, q).value)
+        p += 1
+
+    p = 2
+    q = 7
+    for i in MoveData:
+        ws.cell(p, q).value = i
+        p += 1
+
+    wb.save("koma_sim2_py.xlsx")
+
+
+"""
+↑リング型フェライト磁石の解析用＆使わないやつ
+↓複数のネオジム磁石の解析用
+"""
+
+
+def E2_org(sheet, WS=False):  # 全体を右に5ずらす
+    if WS == False:
+        wb = openpyxl.load_workbook(wk.book)
+        ws = wb[sheet]
+    else:
+        ws = WS
+    ws.insert_cols(1, 5)
+    StopExit()
+    if WS == False:
+        wb.save(wk.book)
+    print(sheet+"整理完了")
+
+
+def E2_comment(sheet, comment):  # セルにコメントを記録
+    wb = openpyxl.load_workbook(wk.book)
+    ws = wb[sheet]
+
+    p = 1
+    while not ws.cell(p, 1).value is None:
+        p += 1
+    p += 1
+    while not ws.cell(p, 1).value is None:
+        p += 1
+    ws.cell(p, 1).value = comment
+    wb.save(wk.book)
+    E_BackUp(comment, True)
+    print(comment+"完了")
+
+
+def E2_check(sheet, model):  # 解析時のモデルの大きさを"check"シートに記録
+    wb = openpyxl.load_workbook(wk.book)
+    ws = wb["check"]
+    ws2 = wb[sheet]
+    q = 1
+    p = 1
+
+    if ws.cell(p, q).value is None:
+        ws.cell(p, q).value = sheet
+
+    while not ws.cell(p, q).value is None:
+        p += 1
+    if ws2.cell(p, q).value is None:
+        p += 1
+        ws.cell(p, q).value = ws2.cell(p, q+5).value
+        E2_org("check", ws)
+        wb.save(wk.book)
+        E2_check(sheet, model)
+        return
+    else:
+        ws.cell(p, q).value = ws2.cell(p, q).value
+        q += 1
+        for i in model:
+            if model[i] != check_model[i]:
+                ws.cell(p, q).value = i+":"+str(model[i])
+                q += 1
+
+    wb.save(wk.book)
+
+
+def ExcelMain2(result, subj, var):  # 結果をセルに記録
+    wb = openpyxl.load_workbook(wk.book)
+    ws = wb[var]
+
+    p = 1
+    q = 1
+
+    if ws.cell(p, q).value is None:
+        ws.cell(p, q).value = "mm"
+        ws.cell(p, q+1).value = "x"
+        ws.cell(p, q+2).value = "y"
+        ws.cell(p, q+3).value = "z"
+        if subj == "mag_num":
+            ws.cell(p, q).value = "num"
+
+    while not ws.cell(p, q).value is None:
+        p += 1
+
+    ws.cell(p, q).value = subj
+    for i in result:
+        q += 1
+        ws.cell(p, q).value = i
+
+    wb.save(wk.book)
+    print(var + str(subj)+"mm"+"保存完了")
+
+
+def E2main(result, model, var):  # これを実行すればよい
+    ExcelMain2(result, model[var], var)
+    E_BackUp(result, model[var])
+    E2_check(var, model)
+    E2_number(var)
+
+
+def E2_number(sheet, load_book=False):  # データの列に番号を振る
     if sheet == "all":
         wb = openpyxl.load_workbook(wk.book)
         i = 0
@@ -377,30 +406,48 @@ def E2_number(sheet, load_book=False):
         wb.save(wk.book)
 
 
-def E_BackUp(result, subj):
+def E_BackUp(result, subj):  # バックアップ用ブックに記録
     wb = openpyxl.load_workbook(
         "C:/users/skmgr/documents/tanaka_back_up/excel_data/data_backup.xlsx")
-    ws = wb["data_backup"]
+    ws = wb.worksheets[0]
     p = 1
     q = 1
+
+    if count.BackUpCount == True:
+        ws.insert_cols(1, 5)
+        count.BackUpCount = False
+
     while not ws.cell(p, q).value is None:
         p += 1
     if subj == True:
+        p += 1
+        while not ws.cell(p, q).value is None:
+            p += 1
         ws.cell(p, q).value = result
+        now = time.gmtime()
+        NowDate = str(now.tm_year)+"/"+str(now.tm_mon)+"/"+str(now.tm_mday)
+        if count.last_date != NowDate:
+            count.last_date = now
+            p += 1
+            ws.cell(p, q).value = NowDate
         count.BackUpCount = True
     else:
-        if count.BackUpCount == True:
-            ws.insert_cols(1, 5)
-            count.BackUpCount = False
         ws.cell(p, q).value = subj
         for i in result:
             q += 1
             ws.cell(p, q).value = i
     E2_number(ws, True)
+    p = 1
+    q = 5
+    while not ws.cell(p, q).value is None:
+        q += 5
+    q += -5
+    if ws.cell(p, q).value >= 100:
+        wb.create_sheet(index=0, title="data_backup"+str(len(wb.worksheets)+1))
     wb.save("C:/users/skmgr/documents/tanaka_back_up/excel_data/data_backup.xlsx")
 
 
-def E2_delete_sheet(sheet):
+def E2_delete_sheet(sheet):  # シートを消去
     wb = openpyxl.load_workbook(wk.book)
     ws = wb[sheet]
     wb.remove(ws)
@@ -408,23 +455,20 @@ def E2_delete_sheet(sheet):
     print(sheet+"削除完了")
 
 
-def E3_heatmap_data(coord):
-    wb = openpyxl.load_workbook(wk.book)
-    if coord == "x":
-        ws = wb["heatmap_x"]
-    if coord == "z":
-        ws = wb["heatmap_z"]
-        
-    pd.DataFrame(data=)
+# def E3_heatmap_data(coord):  # ヒートマップ用二次元配列データを返す
+#     wb = openpyxl.load_workbook(wk.book)
+#     if coord == "x":
+#         ws = wb["heatmap_x"]
+#     if coord == "z":
+#         ws = wb["heatmap_z"]
+
+#     pd.DataFrame(data=)
 
 
-def E3_heatmap_move(sheet="data_z"):
+def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ用データを作成
     wb = openpyxl.load_workbook(wk.book)
     ws = wb[sheet]
-    if sheet == "data_z":
-        ws2 = wb["heatmap_z"]
-    if sheet == "data_x":
-        ws2 = wb["heatmap_x"]
+    ws2 = wb["heatmap_z"]
 
     p = 2
     q_F = 4
@@ -484,7 +528,7 @@ def E3_heatmap_move(sheet="data_z"):
     wb.save(wk.book)
 
 
-def E3_heatmap_xz():
+def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを作成
     wb = openpyxl.load_workbook(wk.book)
     ws = wb["heatmap_z"]
     ws_x = wb["heatmap_x"]
@@ -528,23 +572,3 @@ def E3_heatmap_xz():
         P += 1
 
     wb.save(wk.book)
-
-
-def E2_org3():
-    wb = wb = openpyxl.load_workbook("koma_sim2_py.xlsx")
-    ws = wb["mesh"]
-
-    p = 2
-    q = 4
-    MoveData = []
-    while not ws.cell(p, q).value is None:
-        MoveData.insert(0, ws.cell(p, q).value)
-        p += 1
-
-    p = 2
-    q = 7
-    for i in MoveData:
-        ws.cell(p, q).value = i
-        p += 1
-
-    wb.save("koma_sim2_py.xlsx")

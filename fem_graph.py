@@ -109,7 +109,7 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
                 j = 0
         plt.xticks(yoko2)
     fig.savefig(
-        "C:/python_graph/"+title+".png")
+        "python_graph/"+title+".png")
 
 
 def GraphMain2(sheet, k=1, C=1, coord="X"):
@@ -163,11 +163,11 @@ def GraphMain2(sheet, k=1, C=1, coord="X"):
         j += 1
 
     plt.legend(loc="lower right", bbox_to_anchor=(1, 0))
-    fig.savefig("C:/Users/skmgr/Documents/Tanaka/python_graph/"+title+".png")
+    fig.savefig("python_graph/"+title+".png")
 
 
 def GraphMain3(sheet, rad_ticks, num_ticks, data):
-    plt.figure(figsize=(10,10))
+    plt.figure(figsize=(10, 10))
     i = rad_ticks[0]
     yoko = []
     while i <= rad_ticks[1]:
