@@ -2,8 +2,8 @@ import openpyxl
 from fem_MagSize import model_size
 import sys
 import numpy as np
-# import pandas as pd
 import time
+import pandas as pd
 
 
 class Counter():
@@ -14,7 +14,7 @@ class Counter():
 
 
 class Workbook():
-    book = "koma_sim2_py.xlsx"
+    book = "koma_sim3_py.xlsx"
 
 
 check_model = model_size()

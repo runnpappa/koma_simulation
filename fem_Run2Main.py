@@ -16,7 +16,7 @@ def rad_MagNum(rad_from, rad_to, MagNum_from, MagNum_to, RAD=True, MAG_NUM=True,
             model["rad"] = RAD
             RAD = True
         while model["rad"] <= rad_to:
-            if HEIGHT == True:
+            if HEIGHT == True or HEIGHT == 40:
                 E2_org("dis")
             model["dis"] = 40
             if HEIGHT != True:
