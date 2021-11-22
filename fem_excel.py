@@ -454,14 +454,52 @@ def E2_delete_sheet(sheet):  # シートを消去
     print(sheet+"削除完了")
 
 
-# def E3_heatmap_data(coord):  # ヒートマップ用二次元配列データを返す
-#     wb = openpyxl.load_workbook(wk.book)
-#     if coord == "x":
-#         ws = wb["heatmap_x"]
-#     if coord == "z":
-#         ws = wb["heatmap_z"]
+def E3_heatmap_data(coord):  # ヒートマップ用二次元配列データを返す
+    wb = openpyxl.load_workbook(wk.book)
+    if coord == "x":
+        ws = wb["heatmap_x"]
+    if coord == "z":
+        ws = wb["heatmap_z"]
+    p = 3
+    q = 3
 
-#     pd.DataFrame(data=)
+    Move_MainData = []
+    while not ws.cell(p, q).value is None:
+        while not ws.cell(p, q).value is None:
+            Move_MainData.append(ws.cell(p, q).value)
+            p += 1
+        mag_num = p-3
+        p = 3
+        q += 1
+    rad = q-3
+    MainData = pd.DataFrame(data=Move_MainData, columns=["Fz(N)"])
+
+    i = 0
+    Move_MagNumData = []
+    while i < rad:
+        p = 3
+        q = 2
+        while not ws.cell(p, q).value is None:
+            Move_MagNumData.append(ws.cell(p, q).value)
+            p += 1
+        i += 1
+    MainData["mag_num"] = Move_MagNumData
+
+    i = 0
+    p = 2
+    q = 3
+    Move_RadData = []
+    while not ws.cell(p, q).value is None:
+        while i < mag_num:
+            Move_RadData.append(ws.cell(p, q).value)
+            i += 1
+        i = 0
+        q += 1
+    MainData["rad(mm)"] = Move_RadData
+
+    MainData_pivot=pd.pivot_table(data=MainData,values="Fz(N)",columns="rad(mm)",index="mag_num")
+
+    return MainData_pivot
 
 
 def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ用データを作成
@@ -571,3 +609,29 @@ def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを�
         P += 1
 
     wb.save(wk.book)
+
+def E3_hanntenn(sheet,P,Q):
+    wb = openpyxl.load_workbook(wk.book)
+    if sheet == "x":
+        ws = wb["heatmap_x"]
+    if sheet == "z":
+        ws = wb["heatmap_z"]
+    p=P
+    q=Q
+    data=[]
+    while not ws.cell(p,q).value is None:
+        data.insert(0,[])
+        while not ws.cell(p,q).value is None:
+            data[0].append(ws.cell(p,q).value)
+            q+=1
+        p+=1
+        q=Q
+    p=P
+    for i in data:
+        for j in i:
+            ws.cell(p,q).value = j
+            q+=1
+        p+=1
+        q=Q
+
+    ws.save(wk.book)
