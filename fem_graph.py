@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import openpyxl
 from fem_excel import Workbook
+import seaborn as sns
 
 wk = Workbook()
 
@@ -166,20 +167,8 @@ def GraphMain2(sheet, k=1, C=1, coord="X"):
     fig.savefig("python_graph/"+title+".png")
 
 
-def GraphMain3(sheet, rad_ticks, num_ticks, data):
-    plt.figure(figsize=(10, 10))
-    i = rad_ticks[0]
-    yoko = []
-    while i <= rad_ticks[1]:
-        yoko.append(i)
-        i += 10
-    plt.xticks(yoko)
-    tate = []
-    j = num_ticks[0]
-    while j <= num_ticks[1]:
-        tate.append(j)
-        j += 1
-    plt.yticks(tate)
-    plt.imshow(data, cmap="gray", vmin=0, vmax=255, interpolation="nearest")
-    plt.colorbar()
-    plt.show()
+def GraphMain3(Data):
+    sns.heatmap(data=Data, annot=True, cmap="Blues")
+    title = input("title:")
+    plt.title(title)
+    plt.savefig("python_graph/"+title+".png")
