@@ -8,7 +8,7 @@ import pandas as pd
 
 class Count():
     StopCount = 0
-    BackUpCount = False
+    BackUpCount = True
     u = time.gmtime()
     last_date = str(u.tm_year)+"/"+str(u.tm_mon)+"/"+str(u.tm_mday)
 
@@ -412,8 +412,14 @@ def E_BackUp(result, subj):  # バックアップ用ブックに記録
     p = 1
     q = 1
 
-    if Count.BackUpCount == True and subj==False:
+    if Count.BackUpCount == True and subj == False:
         ws.insert_cols(1, 5)
+        now = time.gmtime()
+        NowDate = str(now.tm_year)+"/"+str(now.tm_mon)+"/"+str(now.tm_mday)
+        if Count.last_date != NowDate:
+            Count.last_date = NowDate
+            p += 1
+            ws.cell(p, q).value = NowDate
         Count.BackUpCount = False
 
     while not ws.cell(p, q).value is None:
@@ -423,12 +429,6 @@ def E_BackUp(result, subj):  # バックアップ用ブックに記録
         while not ws.cell(p, q).value is None:
             p += 1
         ws.cell(p, q).value = result
-        now = time.gmtime()
-        NowDate = str(now.tm_year)+"/"+str(now.tm_mon)+"/"+str(now.tm_mday)
-        if Count.last_date != NowDate:
-            Count.last_date = NowDate
-            p += 1
-            ws.cell(p, q).value = NowDate
         Count.BackUpCount = True
     else:
         ws.cell(p, q).value = subj

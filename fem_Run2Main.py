@@ -7,6 +7,8 @@ from fem_Main_3 import FemtetMain as Run3
 def rad_MagNum(rad_from, rad_to, MagNum_from, MagNum_to, RAD=True, MAG_NUM=True, HEIGHT=True):
     model = model_size()
     model["mag_num"] = MagNum_from
+    if RAD != True or MAG_NUM != True or HEIGHT != True:
+        Count.BackUpCount = False
     if MAG_NUM != True:
         model["mag_num"] = MAG_NUM
         MAG_NUM = True
