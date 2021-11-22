@@ -172,3 +172,56 @@ def GraphMain3(Data):
     title = input("title:")
     plt.title(title)
     plt.savefig("python_graph/"+title+".png")
+
+
+def GraphMain4(sheet, cals, coord="X"):
+    wb = openpyxl.load_workbook(wk.book, data_only=True)
+    ws = wb[sheet]
+
+    fig = plt.figure(figsize=(10, 5))
+    colorlist = ["r", "g", "b", "c", "m", "y", "k"]
+    title = input("title:")
+    plt.title(title)
+    yoko = []
+    l = 2
+
+    K = 1+5*(cals[0]-1)
+    while not ws.cell(l, K).value is None:
+        yoko.append(ws.cell(l, K).value)
+        l += 1
+    if sheet == "dis":
+        plt.xlabel("height(mm)")
+    elif sheet == "rad":
+        plt.xlabel("radius(mm)")
+    elif sheet == "mag_num":
+        plt.xlabel("num")
+    if coord == "Z":
+        plt.ylabel("Fz(N)")
+    elif coord == "X":
+        plt.ylabel("Fx(N)")
+    plt.grid(True)
+    if sheet == "mag_num":
+        plt.xticks(yoko)
+    else:
+        j = 0
+        yoko2 = []
+        i = min(yoko)
+        while i <= max(yoko):
+            yoko2.append(i)
+            i += 10
+        plt.xticks(yoko2)
+    j = 0
+    for data in cals:
+        i = 2
+        Coord = []
+        XYZ = {"x": 1, "y": 2, "z": 3}
+        cal = 1 + XYZ[coord] + 5*(data-1)
+        while not ws.cell(i, cal).value is None:
+            Coord.append(ws.cell(i, cal).value)
+            i += 1
+        label_name = ws.cell(i+2, cal-XYZ[coord]).value
+        plt.plot(yoko, Coord, color=colorlist[j], label=label_name)
+        j += 1
+
+    plt.legend(loc="lower right", bbox_to_anchor=(1, 0))
+    fig.savefig("python_graph/"+title+".png")
