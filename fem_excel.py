@@ -27,6 +27,12 @@ def StopExit():
         sys.exit
 
 
+def sheet_clear(ws):
+    for row in ws:
+        for cell in row:
+            cell.value = None
+
+
 def ExcelMain(ws, result, From, Interval):
     p = 1
     q = 1
@@ -276,6 +282,29 @@ def E2_org3():  # 行を上下反転
     wb.save("koma_sim2_py.xlsx")
 
 
+def E3_hanntenn(sheet="heatmap_z", P=3, Q=2):  # E3_heatmap_z修正用
+    wb = openpyxl.load_workbook(wk.book)
+    ws = wb[sheet]
+    p = P
+    q = Q
+    data = []
+    while not ws.cell(p, q).value is None:
+        data.insert(0, [])
+        while not ws.cell(p, q).value is None:
+            data[0].append(ws.cell(p, q).value)
+            q += 1
+        p += 1
+        q = Q
+    p = P
+    for i in data:
+        for j in i:
+            ws.cell(p, q).value = j
+            q += 1
+        p += 1
+        q = Q
+
+    wb.save(wk.book)
+
 """
 ↑リング型フェライト磁石の解析用＆使わないやつ
 ↓複数のネオジム磁石の解析用
@@ -483,7 +512,7 @@ def E3_heatmap_data(coord):  # ヒートマップ用二次元配列データを�
             Move_MagNumData.append(ws.cell(p, q).value)
             p += 1
         i += 1
-    MainData["mag_num"] = Move_MagNumData
+    MainData["num"] = Move_MagNumData
 
     i = 0
     p = 2
@@ -497,7 +526,8 @@ def E3_heatmap_data(coord):  # ヒートマップ用二次元配列データを�
         q += 1
     MainData["rad(mm)"] = Move_RadData
 
-    MainData_pivot=pd.pivot_table(data=MainData,values="Fz(N)",columns="rad(mm)",index="mag_num")
+    MainData_pivot = pd.pivot_table(
+        data=MainData, values="Fz(N)", columns="rad(mm)", index="num")
 
     return MainData_pivot
 
@@ -506,6 +536,8 @@ def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ�
     wb = openpyxl.load_workbook(wk.book)
     ws = wb[sheet]
     ws2 = wb["heatmap_z"]
+
+    sheet_clear(ws2)
 
     p = 2
     q_F = 4
@@ -571,6 +603,8 @@ def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを�
     ws_x = wb["heatmap_x"]
     ws_XData = wb["data_x"]
 
+    sheet_clear(ws_x)
+
     p = 3
     q = 3
     while not ws.cell(p, q).value is None:
@@ -591,7 +625,6 @@ def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを�
             q += 1
         p += 1
         q = 3
-
     rad = 30
     mag_num = 1
     ws_x.cell(1, 3).value = "rad"
@@ -610,28 +643,4 @@ def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを�
 
     wb.save(wk.book)
 
-def E3_hanntenn(sheet,P,Q):
-    wb = openpyxl.load_workbook(wk.book)
-    if sheet == "x":
-        ws = wb["heatmap_x"]
-    if sheet == "z":
-        ws = wb["heatmap_z"]
-    p=P
-    q=Q
-    data=[]
-    while not ws.cell(p,q).value is None:
-        data.insert(0,[])
-        while not ws.cell(p,q).value is None:
-            data[0].append(ws.cell(p,q).value)
-            q+=1
-        p+=1
-        q=Q
-    p=P
-    for i in data:
-        for j in i:
-            ws.cell(p,q).value = j
-            q+=1
-        p+=1
-        q=Q
 
-    ws.save(wk.book)
