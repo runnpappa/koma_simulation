@@ -6,7 +6,7 @@ import time
 import pandas as pd
 
 
-class Counter():
+class Count():
     StopCount = 0
     BackUpCount = False
     u = time.gmtime()
@@ -18,13 +18,12 @@ class Workbook():
 
 
 check_model = model_size()
-count = Counter()
 wk = Workbook()
 
 
 def StopExit():
-    count.StopCount += 1
-    if count.StopCount > 100:
+    Count.StopCount += 1
+    if Count.StopCount > 100:
         sys.exit
 
 
@@ -413,9 +412,9 @@ def E_BackUp(result, subj):  # バックアップ用ブックに記録
     p = 1
     q = 1
 
-    if count.BackUpCount == True:
+    if Count.BackUpCount == True and subj==False:
         ws.insert_cols(1, 5)
-        count.BackUpCount = False
+        Count.BackUpCount = False
 
     while not ws.cell(p, q).value is None:
         p += 1
@@ -426,11 +425,11 @@ def E_BackUp(result, subj):  # バックアップ用ブックに記録
         ws.cell(p, q).value = result
         now = time.gmtime()
         NowDate = str(now.tm_year)+"/"+str(now.tm_mon)+"/"+str(now.tm_mday)
-        if count.last_date != NowDate:
-            count.last_date = now
+        if Count.last_date != NowDate:
+            Count.last_date = NowDate
             p += 1
             ws.cell(p, q).value = NowDate
-        count.BackUpCount = True
+        Count.BackUpCount = True
     else:
         ws.cell(p, q).value = subj
         for i in result:
