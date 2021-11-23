@@ -168,10 +168,11 @@ def GraphMain2(sheet, k=1, C=1, coord="X"):
 
 
 def GraphMain3(Data):
-    sns.heatmap(data=Data, annot=True, cmap="Blues")
+    sns.heatmap(data=Data, annot=True, cmap="Blues",cbar_kws={"label":"height(mm)"})
     title = input("title:")
     plt.title(title)
     plt.savefig("python_graph/"+title+".png")
+    plt.clf()
 
 
 def GraphMain4(sheet, cals, coord="X"):

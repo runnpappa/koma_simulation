@@ -305,6 +305,7 @@ def E3_hanntenn(sheet="heatmap_z", P=3, Q=2):  # E3_heatmap_z修正用
 
     wb.save(wk.book)
 
+
 """
 ↑リング型フェライト磁石の解析用＆使わないやつ
 ↓複数のネオジム磁石の解析用
@@ -483,12 +484,10 @@ def E2_delete_sheet(sheet):  # シートを消去
     print(sheet+"削除完了")
 
 
-def E3_heatmap_data(coord):  # ヒートマップ用二次元配列データを返す
+def E3_heatmap_data(sheet):  # ヒートマップ用二次元配列データを返す
     wb = openpyxl.load_workbook(wk.book)
-    if coord == "x":
-        ws = wb["heatmap_x"]
-    if coord == "z":
-        ws = wb["heatmap_z"]
+    ws = wb[sheet]
+
     p = 3
     q = 3
 
@@ -528,6 +527,7 @@ def E3_heatmap_data(coord):  # ヒートマップ用二次元配列データを�
 
     MainData_pivot = pd.pivot_table(
         data=MainData, values="Fz(N)", columns="rad(mm)", index="num")
+    MainData_pivot.sort_index(ascending=False, inplace=True)
 
     return MainData_pivot
 
@@ -535,12 +535,16 @@ def E3_heatmap_data(coord):  # ヒートマップ用二次元配列データを�
 def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ用データを作成
     wb = openpyxl.load_workbook(wk.book)
     ws = wb[sheet]
-    ws2 = wb["heatmap_z"]
+    if sheet == "data_z":
+        ws2 = wb["heatmap_z"]
+    elif sheet == "data_x":
+        ws2 = wb["heatmap_x"]
 
     sheet_clear(ws2)
 
     p = 2
     q_F = 4
+    q_x = 2
     q_dis = 1
 
     weight = 0.0611  # 重さを変える(単位:N)
@@ -549,29 +553,44 @@ def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ�
     while not ws.cell(p, q_F).value is None:
         find = False
         while not ws.cell(p, q_F).value is None:
-            if p >= 3 and p <= 7 and find == False:
-                if ws.cell(p, q_F).value > weight and ws.cell(p+1, q_F).value < weight:
-                    ws.cell(L, q_dis).value = ws.cell(p, q_dis).value
-                    find = True
+            if sheet == "data_z":
+                if p >= 3 and p <= 7 and find == False:
+                    if ws.cell(p, q_F).value > weight and ws.cell(p+1, q_F).value < weight:
+                        ws.cell(L, q_dis).value = ws.cell(p, q_dis).value
+                        find = True
+            elif sheet == "data_x":
+                if find == False:
+                    if ws.cell(p, q_x).value >= 0:
+                        ws.cell(L, q_dis).value = ws.cell(p-1, q_dis).value
+                        if isinstance(ws.cell(L, q_dis).value, str):
+                            ws.cell(L, q_dis).value = 0
+                        find = True
             p += 1
         if find == False:
-            ws.cell(L, q_dis).value = 0
+            if sheet == "data_x":
+                ws.cell(L, q_dis).value = ws.cell(p-1, q_dis).value
+            else:
+                ws.cell(L, q_dis).value = 0
         q_dis += 5
         q_F += 5
+        q_x += 5
         p = 2
 
     m = 13
     n = 1
+    i = 0
     move_data_z = [[]]
     Mag = ws.cell(m-2, n).value
     while not ws.cell(m, n).value is None:
         if Mag != ws.cell(m-2, n).value:
             Mag = ws.cell(m-2, n).value
-            move_data_z.insert(0, [])
-        move_data_z[0].insert(0, ws.cell(m, n).value)
+            move_data_z.append([])
+            i += 1
+        move_data_z[i].insert(0, ws.cell(m, n).value)
         n += 5
     p = 3
     q = 3
+
     for i in move_data_z:
         for j in i:
             ws2.cell(p, q).value = j
@@ -579,7 +598,7 @@ def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ�
         q = 3
         p += 1
     rad = 30
-    mag_num = 1
+    mag_num = 0
     ws2.cell(1, 3).value = "rad"
     ws2.cell(3, 1).value = "mag_num"
     P = 3
@@ -590,8 +609,12 @@ def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ�
         Q += 1
     Q = 3
     while not ws2.cell(P, Q).value is None:
-        ws2.cell(P, Q-1).value = mag_num
         mag_num += 1
+        P += 1
+    P = 3
+    while not ws2.cell(P, Q).value is None:
+        ws2.cell(P, Q-1).value = mag_num
+        mag_num += -1
         P += 1
 
     wb.save(wk.book)
@@ -600,7 +623,7 @@ def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ�
 def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを作成
     wb = openpyxl.load_workbook(wk.book)
     ws = wb["heatmap_z"]
-    ws_x = wb["heatmap_x"]
+    ws_x = wb["heatmap_xz"]
     ws_XData = wb["data_x"]
 
     sheet_clear(ws_x)
@@ -610,7 +633,7 @@ def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを�
     while not ws.cell(p, q).value is None:
         while not ws.cell(p, q).value is None:
             if ws.cell(p, q).value != 0:
-                num = (q-2)+11*(p-3)
+                num = (q-2)+11*(7-p)
                 j = 2
                 k = 1+5*(num-1)
                 while not ws_XData.cell(j, k).value is None:
@@ -626,7 +649,7 @@ def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを�
         p += 1
         q = 3
     rad = 30
-    mag_num = 1
+    mag_num = 0
     ws_x.cell(1, 3).value = "rad"
     ws_x.cell(3, 1).value = "mag_num"
     P = 3
@@ -636,9 +659,13 @@ def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを�
         rad += 1
         Q += 1
     Q = 3
+    while not ws.cell(P, Q).value is None:
+        mag_num += 1
+        P += 1
+    P = 3
     while not ws_x.cell(P, Q).value is None:
         ws_x.cell(P, Q-1).value = mag_num
-        mag_num += 1
+        mag_num += -1
         P += 1
 
     wb.save(wk.book)
