@@ -8,7 +8,7 @@ import pandas as pd
 class Count():
     StopCount = 0
     BackUpCount = True
-    
+
 
 class Workbook():
     book = "documents/tanaka/git_files/fem_data/koma_sim3_py.xlsx"
@@ -614,49 +614,43 @@ def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ�
 def E3_heatmap_xz():  # X方向z方向考慮したヒートマップ用データを作成
     wb = openpyxl.load_workbook(wk.book)
     ws = wb["heatmap_z"]
-    ws_x = wb["heatmap_xz"]
-    ws_XData = wb["data_x"]
+    ws_xz = wb["heatmap_xz"]
+    ws_x = wb["heatmap_x"]
 
-    sheet_clear(ws_x)
+    sheet_clear(ws_xz)
 
     p = 3
     q = 3
-    mag_num=ws.cell(3,2).value
+    mag_num = ws.cell(3, 2).value
     while not ws.cell(p, q).value is None:
         while not ws.cell(p, q).value is None:
             if ws.cell(p, q).value != 0:
-                num = (q-2)+11*(2+mag_num-p)
-                j = 2
-                k = 1+5*(num-1)
-                while not ws_XData.cell(j, k).value is None:
-                    if ws_XData.cell(j, k).value == ws.cell(p, q).value:
-                        if ws_XData.cell(j, k+1).value >= 0:
-                            ws_x.cell(p, q).value = ws.cell(p, q).value
-                        else:
-                            ws_x.cell(p, q).value = 0
-                    j += 1
+                if ws.cell(p, q).value <= ws_x.cell(p, q).value:
+                    ws_xz.cell(p, q).value = ws.cell(p, q).value
+                else:
+                    ws_xz.cell(p, q).value = 0
             else:
-                ws_x.cell(p, q).value = 0
+                ws_xz.cell(p, q).value = 0
             q += 1
         p += 1
         q = 3
     rad = 30
     mag_num = 0
-    ws_x.cell(1, 3).value = "rad"
-    ws_x.cell(3, 1).value = "mag_num"
+    ws_xz.cell(1, 3).value = "rad"
+    ws_xz.cell(3, 1).value = "mag_num"
     P = 3
     Q = 3
-    while not ws_x.cell(P, Q).value is None:
-        ws_x.cell(P-1, Q).value = rad
+    while not ws_xz.cell(P, Q).value is None:
+        ws_xz.cell(P-1, Q).value = rad
         rad += 1
         Q += 1
     Q = 3
-    while not ws.cell(P, Q).value is None:
+    while not ws_xz.cell(P, Q).value is None:
         mag_num += 1
         P += 1
     P = 3
-    while not ws_x.cell(P, Q).value is None:
-        ws_x.cell(P, Q-1).value = mag_num
+    while not ws_xz.cell(P, Q).value is None:
+        ws_xz.cell(P, Q-1).value = mag_num
         mag_num += -1
         P += 1
 

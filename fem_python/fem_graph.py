@@ -168,7 +168,7 @@ def GraphMain2(sheet, k=1, C=1, coord="x"):#k,Cには番号　kからCまでを�
 
 
 def GraphMain3(Data,Title=False,sheet="heatmap_z"): #HeatmapMain用
-    sns.heatmap(data=Data, annot=True, cmap="Blues",cbar_kws={"label":"height(mm)"})
+    sns.heatmap(data=Data, annot=True, cmap="Blues",cbar_kws={"label":"height(mm)"},vmin=0,vmax=70)
     if Title==True:
         title = input("title:")
     else:
