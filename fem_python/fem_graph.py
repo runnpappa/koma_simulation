@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 import openpyxl
-from fem_excel import Workbook
+from fem_excel import *
 import seaborn as sns
 
 wk = Workbook()
 
 
-def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
+def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False): #分からん
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     if type(sheet) is str:
         ws = wb[sheet]
@@ -110,10 +110,10 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
                 j = 0
         plt.xticks(yoko2)
     fig.savefig(
-        "fem_python/python_graph/"+title+".png")
+        "documents/tanaka/git_files/fem_python/python_graph/"+title+".png")
 
 
-def GraphMain2(sheet, k=1, C=1, coord="X"):
+def GraphMain2(sheet, k=1, C=1, coord="x"):#k,Cには番号　kからCまでをひとつのグラフにする coord="x" or "y" or "z"
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     ws = wb[sheet]
 
@@ -153,7 +153,7 @@ def GraphMain2(sheet, k=1, C=1, coord="X"):
     while k <= C:
         i = 2
         Coord = []
-        XYZ = {"X": 1, "Y": 2, "Z": 3}
+        XYZ = {"x": 1, "y": 2, "z": 3}
         cal = 1 + XYZ[coord] + 5*(k-1)
         while not ws.cell(i, cal).value is None:
             Coord.append(ws.cell(i, cal).value)
@@ -164,10 +164,10 @@ def GraphMain2(sheet, k=1, C=1, coord="X"):
         j += 1
 
     plt.legend(loc="lower right", bbox_to_anchor=(1, 0))
-    fig.savefig("fem_python/python_graph/"+title+".png")
+    fig.savefig("documents/tanaka/git_files/fem_python/python_graph/"+title+".png")
 
 
-def GraphMain3(Data,Title=False,sheet="heatmap_z"):
+def GraphMain3(Data,Title=False,sheet="heatmap_z"): #HeatmapMain用
     sns.heatmap(data=Data, annot=True, cmap="Blues",cbar_kws={"label":"height(mm)"})
     if Title==True:
         title = input("title:")
@@ -179,11 +179,11 @@ def GraphMain3(Data,Title=False,sheet="heatmap_z"):
         else:
             title="Fz_stable_xyz"
     plt.title(title)
-    plt.savefig("fem_python/python_graph/"+title+".png")
+    plt.savefig("documents/tanaka/git_files/fem_python/python_graph/"+title+".png")
     plt.clf()
 
 
-def GraphMain4(sheet, cals, coord="X"):
+def GraphMain4(sheet, cals, coord="X"): #calsにはリストで番号与える　番号のグラフを一つに表示　coord="x" or "y" "z"
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     ws = wb[sheet]
 
@@ -233,4 +233,12 @@ def GraphMain4(sheet, cals, coord="X"):
         j += 1
 
     plt.legend(loc="lower right", bbox_to_anchor=(1, 0))
-    fig.savefig("python_graph/"+title+".png")
+    fig.savefig("documents/tanaka/git_files/python_graph/"+title+".png")
+
+def HeatmapMain(Title=False): #Title==Trueのときタイトル入力手動
+    E3_heatmap_move("data_z")
+    GraphMain3(E3_heatmap_data("heatmap_z"),Title,"heatmap_z")
+    E3_heatmap_move("data_x")
+    GraphMain3(E3_heatmap_data("heatmap_x"),Title,"heatmap_x")
+    E3_heatmap_xz()
+    GraphMain3(E3_heatmap_data("heatmap_xz"),Title,"heatmap_xz")

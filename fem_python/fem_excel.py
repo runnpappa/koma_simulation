@@ -11,7 +11,7 @@ class Count():
     
 
 class Workbook():
-    book = "fem_data/koma_sim3_py.xlsx"
+    book = "documents/tanaka/git_files/fem_data/koma_sim3_py.xlsx"
 
 
 check_model = model_size()
@@ -475,7 +475,7 @@ def E2_delete_sheet(sheet):  # シートを消去
     print(sheet+"削除完了")
 
 
-def E3_heatmap_data(sheet):  # ヒートマップ用二次元配列データを返す
+def E3_heatmap_data(sheet):  # ヒートマップ用ピボットテーブルを返す
     wb = openpyxl.load_workbook(wk.book)
     ws = wb[sheet]
 
@@ -611,7 +611,7 @@ def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ�
     wb.save(wk.book)
 
 
-def E3_heatmap_xz():  # X方向も考慮したヒートマップ用データを作成
+def E3_heatmap_xz():  # X方向z方向考慮したヒートマップ用データを作成
     wb = openpyxl.load_workbook(wk.book)
     ws = wb["heatmap_z"]
     ws_x = wb["heatmap_xz"]
