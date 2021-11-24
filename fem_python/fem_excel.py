@@ -11,7 +11,7 @@ class Count():
     
 
 class Workbook():
-    book = "../fem_data/koma_sim3_py.xlsx"
+    book = "fem_data/koma_sim3_py.xlsx"
 
 
 check_model = model_size()

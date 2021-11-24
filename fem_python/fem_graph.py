@@ -110,7 +110,7 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
                 j = 0
         plt.xticks(yoko2)
     fig.savefig(
-        "python_graph/"+title+".png")
+        "fem_python/python_graph/"+title+".png")
 
 
 def GraphMain2(sheet, k=1, C=1, coord="X"):
@@ -164,7 +164,7 @@ def GraphMain2(sheet, k=1, C=1, coord="X"):
         j += 1
 
     plt.legend(loc="lower right", bbox_to_anchor=(1, 0))
-    fig.savefig("python_graph/"+title+".png")
+    fig.savefig("fem_python/python_graph/"+title+".png")
 
 
 def GraphMain3(Data,Title=False,sheet="heatmap_z"):
@@ -179,7 +179,7 @@ def GraphMain3(Data,Title=False,sheet="heatmap_z"):
         else:
             title="Fz_stable_xyz"
     plt.title(title)
-    plt.savefig("python_graph/"+title+".png")
+    plt.savefig("fem_python/python_graph/"+title+".png")
     plt.clf()
 
 
