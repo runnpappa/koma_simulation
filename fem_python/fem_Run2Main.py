@@ -31,6 +31,8 @@ def rad_MagNum(rad_from, rad_to, MagNum_from, MagNum_to, RAD=True, MAG_NUM=True,
             E2_comment("dis", "mag_num"+str(model["mag_num"]))
             model["rad"] += 1
         model["mag_num"] += 1
+        if model["mag_num"]>=10:
+            model["mesh"]=0.6
 
 
 def var_dis3(var, num, dis_from, dis_to, sub=False):
