@@ -28,7 +28,10 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):  # 分から�
             if coord == "x":
                 X.append(ws.cell(p, q+1).value)
             elif coord == "z":
-                Z.append(ws.cell(p, q+1).value)
+                Z.append(ws.cell(p, q+3).value)
+            if Mag == True:
+                mag.append(ws.cell(p, q+4).value)
+            
             p += 1
     else:
         cal = 1+5*(C-1)
@@ -98,7 +101,7 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):  # 分から�
                     j = 0
             plt.xticks(yoko2)
         else:
-            plt.xlabel(yoko)
+            plt.xticks(yoko)
     else:
         j = 0
         yoko2 = []
