@@ -3,6 +3,22 @@ from fem_MagSize import model_size
 from fem_Main_2 import FemtetMain as Run
 from fem_Main_3 import FemtetMain as Run3
 
+def var_sub3(rad,mag_num,dis_from,dis_to=False):
+    model = model_size()
+    model["rad"]=rad
+    model["mag_num"]=mag_num
+    i=dis_from
+    if dis_to==False:
+        j=dis_from
+    else:
+        j=dis_to
+    E2_org("dis")
+    while i<=j:
+        model["dis"]=i
+        E2main(Run3(model), model, "dis")
+        i+=5
+    E2_comment("dis", "rad"+str(model["rad"])+"mm")
+    E2_comment("dis", "mag_num"+str(model["mag_num"]))
 
 def rad_MagNum(rad_from, rad_to, MagNum_from, MagNum_to, RAD=True, MAG_NUM=True, HEIGHT=True):
     model = model_size()
