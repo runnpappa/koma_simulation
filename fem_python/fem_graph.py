@@ -252,7 +252,7 @@ def HeatmapMain(Title=False):  # Title==Trueのときタイトル入力手動
     GraphMain3(E3_heatmap_data("heatmap_xz"), Title, "heatmap_xz")
 
 
-def GraphMain5(sheet="data_z"):
+def GraphMain5(sheet="data_z"):  #sheet内のデータを全てグラフ化
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     ws = wb[sheet]
 

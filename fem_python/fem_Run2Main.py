@@ -3,7 +3,7 @@ from fem_MagSize import model_size
 from fem_Main_2 import FemtetMain as Run
 from fem_Main_3 import FemtetMain as Run3
 
-def var_sub3(rad,mag_num,dis_from,dis_to=False):
+def var_sub3(rad,mag_num,dis_from,dis_to=False):  #dis_to==Falseでdis_fromのみ解析
     model = model_size()
     model["rad"]=rad
     model["mag_num"]=mag_num
