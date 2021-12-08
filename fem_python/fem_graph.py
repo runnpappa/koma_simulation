@@ -67,13 +67,15 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):  # 分から�
             plt.xlabel("outer_radius(mm)")
         elif sheet == 2 or sheet == 5:
             plt.xlabel("inner_radius(mm)")
+        else:
+            plt.xlabel("height(mm)")
     else:
         plt.xlabel("height(mm)")
     plt.grid(True)
 
     if coord == "x":
         plt.ylabel("Fx(N)")
-        plt.plot(yoko, X, color="blue", label="X:3mm")
+        plt.plot(yoko, X, color="blue", label="Fx")
         if D != False:
             plt.plot(yoko, X2, color="red", label="X:-3mm")
     elif coord == "z":
