@@ -4,5 +4,4 @@ from fem_MagSize import model_size
 from fem_Run2Main import *
 from fem_Main_3 import FemtetMain as Run3
 
-var_sub3(36, 5, 20, 35)
-var_sub3(36, 5, 75, 100)
+rad_MagNum(30,40,1,10)
