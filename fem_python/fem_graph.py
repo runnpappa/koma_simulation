@@ -4,9 +4,9 @@ from fem_excel import *
 import seaborn as sns
 
 wk = Workbook()
+model=model_size()
 
-
-def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):  # 分からん
+def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):  # P!=Falseで p=P, q=C, P==Falseで Cに番号
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     if type(sheet) is str:
         ws = wb[sheet]
@@ -30,8 +30,7 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):  # 分から�
             elif coord == "z":
                 Z.append(ws.cell(p, q+3).value)
             if Mag == True:
-                mag.append(ws.cell(p, q+4).value)
-            
+                mag.append(model["weight"])
             p += 1
     else:
         cal = 1+5*(C-1)
@@ -41,7 +40,7 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):  # 分から�
             Y.append(ws.cell(a, cal+2).value)
             Z.append(ws.cell(a, cal+3).value)
             if Mag == True:
-                mag.append(ws.cell(a, cal+4).value)
+                mag.append(model["weight"])
             a += 1
         if D != False:
             X2 = []
