@@ -538,7 +538,7 @@ def E3_heatmap_move(sheet="data_z"):  # 解析データからヒートマップ�
     q_x = 2
     q_dis = 1
 
-    weight = 0.0931  # 重さを変える(単位:N)
+    weight = 0.0833  # 重さを変える(単位:N)
 
     L = 13
     while not ws.cell(p, q_F).value is None:
