@@ -9,7 +9,7 @@ def model_size():
     coord_y = 0
     mesh = 0.5
     mag_num = 2
-    weight = 0.0833
+    weight = 0.0794
 
     Model = {"thick": thick, "Thick": Thick, "r": r, "R": R, "dis": dis,
              "x": coord_x, "y": coord_y, "mesh": mesh, "rad": rad, "mag_num": mag_num, "weight": weight}
