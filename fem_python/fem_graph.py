@@ -4,9 +4,11 @@ from fem_excel import *
 import seaborn as sns
 
 wk = Workbook()
-model=model_size()
+model = model_size()
 
-def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):  # P!=Falseで p=P, q=C, P==Falseで Cに番号
+
+# P!=Falseで p=P, q=C, P==Falseで Cに番号
+def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     if type(sheet) is str:
         ws = wb[sheet]
@@ -173,8 +175,12 @@ def GraphMain2(sheet, k=1, C=1, coord="x"):
         "documents/tanaka/git_files/fem_python/python_graph/"+title+".png")
 
 
-def GraphMain3(Data, Title=False, sheet="heatmap_z"):  # HeatmapMain用
-    sns.heatmap(data=Data, annot=True, cmap="Blues", cbar_kws={
+def GraphMain3(Data, Title=False, sheet="heatmap_z", NULLDATA=False):  # HeatmapMain用
+    if NULLDATA == True:
+        i = False
+    else:
+        i = True
+    sns.heatmap(data=Data, annot=i, cmap="Blues", cbar_kws={
                 "label": "height(mm)"}, vmin=0, vmax=70)
     if Title == True:
         title = input("title:")
@@ -244,16 +250,19 @@ def GraphMain4(sheet, cals, coord="X"):  # calsにはリストで番号与える
     fig.savefig("documents/tanaka/git_files/python_graph/"+title+".png")
 
 
-def HeatmapMain(Title=False):  # Title==Trueのときタイトル入力手動
+def HeatmapMain(Title=False, NULLDATA=False):  # Title==Trueのときタイトル入力手動
     E3_heatmap_move("data_z")
-    GraphMain3(E3_heatmap_data("heatmap_z"), Title, "heatmap_z")
+    GraphMain3(E3_heatmap_data("heatmap_z", NULLDATA),
+               Title, "heatmap_z", NULLDATA)
     E3_heatmap_move("data_x")
-    GraphMain3(E3_heatmap_data("heatmap_x"), Title, "heatmap_x")
+    GraphMain3(E3_heatmap_data("heatmap_x", NULLDATA),
+               Title, "heatmap_x", NULLDATA)
     E3_heatmap_xz()
-    GraphMain3(E3_heatmap_data("heatmap_xz"), Title, "heatmap_xz")
+    GraphMain3(E3_heatmap_data("heatmap_xz", NULLDATA),
+               Title, "heatmap_xz", NULLDATA)
 
 
-def GraphMain5(sheet="data_z"):  #sheet内のデータを全てグラフ化
+def GraphMain5(sheet="data_z"):  # sheet内のデータを全てグラフ化
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     ws = wb[sheet]
 

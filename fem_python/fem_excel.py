@@ -475,7 +475,7 @@ def E2_delete_sheet(sheet):  # シートを消去
     print(sheet+"削除完了")
 
 
-def E3_heatmap_data(sheet):  # ヒートマップ用ピボットテーブルを返す
+def E3_heatmap_data(sheet, NULLDATA=False):  # ヒートマップ用ピボットテーブルを返す
     wb = openpyxl.load_workbook(wk.book)
     ws = wb[sheet]
 
@@ -485,7 +485,10 @@ def E3_heatmap_data(sheet):  # ヒートマップ用ピボットテーブルを�
     Move_MainData = []
     while not ws.cell(p, q).value is None:
         while not ws.cell(p, q).value is None:
-            Move_MainData.append(ws.cell(p, q).value)
+            if NULLDATA==True:
+                Move_MainData.append(0)
+            else:
+                Move_MainData.append(ws.cell(p, q).value)
             p += 1
         mag_num = p-3
         p = 3
