@@ -3,9 +3,9 @@ def model_size():
     Thick = 2
     r = 6.5
     R = 11.5
-    dis = 50
-    rad = 30
-    coord_x = 5
+    dis = 30
+    rad = 33
+    coord_x = 0
     coord_y = 0
     mesh = 0.5
     mag_num = 2

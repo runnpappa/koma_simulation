@@ -4,4 +4,11 @@ from fem_MagSize import model_size
 from fem_Run2Main import *
 from fem_Main_3 import FemtetMain as Run3
 
-rad_MagNum(30,40,1,10)
+model = model_size()
+
+model["dis"] = 30
+model["x"] = 5
+
+while model["dis"] <= 60:
+    E2main(Run(model), model, "dis")
+    model["dis"] += 5
