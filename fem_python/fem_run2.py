@@ -6,9 +6,9 @@ from fem_Main_3 import FemtetMain as Run3
 
 model = model_size()
 
-model["dis"] = 30
-model["x"] = 5
+model["dis"] = 20
+model["x"] = 0
 
-while model["dis"] <= 60:
+while model["dis"] <= 80:
     E2main(Run(model), model, "dis")
     model["dis"] += 5
