@@ -3,12 +3,13 @@ from fem_excel import *
 from fem_MagSize import model_size
 from fem_Run2Main import *
 from fem_Main_3 import FemtetMain as Run3
+from fem_Main_sub import FemtetMain as Run_sub
 
 model = model_size()
 
 model["dis"] = 20
 model["x"] = 0
 
-while model["dis"] <= 80:
-    E2main(Run(model), model, "dis")
+while model["dis"] <= 150:
+    E2main(Run_sub(model), model, "dis")
     model["dis"] += 5

@@ -219,6 +219,7 @@ def MaterialSetUp():
 
     # '------- Materialの設定 -------
     MaterialSetUp_000_ネオジム磁石()
+    MaterialSetUp_000_ネオジム磁石1()
 
     # '+++++++++++++++++++++++++++++++++++++++++
     # '++使用されていないMaterialデータです
@@ -268,6 +269,45 @@ def MaterialSetUp_000_ネオジム磁石():
 
     # '------- 磁石(Magneto) -------
     Mtl.Magneto(Index).sM = 1.8
+
+
+def MaterialSetUp_000_ネオジム磁石1():
+    global Femtet  # globalなFemtet変数を利用する
+    Mtl = Femtet.Material  # 材料定数クラス
+
+    # '------- Materialの追加 -------
+    Mtl.Add("000_ネオジム磁石1")
+
+    # '------- Material Indexの設定 -------
+    Index = Mtl.Ask("000_ネオジム磁石1")
+
+    # '------- 透磁率(Permeability) -------
+    Mtl.Permeability(
+        Index).MagneticMaterialType = constants.MAGNETIC_PERMANENT_C
+    Mtl.Permeability(Index).sMu = 1.05
+    Mtl.Permeability(
+        Index).BHExtrapolationType = constants.BH_GRADIENT_LASTTWOPOINT_C
+
+    # '------- 密度(Density) -------
+    Mtl.Density(Index).Dens = 7400
+
+    # '------- 圧電定数(PiezoElectricity) -------
+    Mtl.PiezoElectricity(Index).Set_mE(0, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(1, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(2, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(3, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(5, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(6, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(7, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(8, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(10, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(11, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(15, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(16, 0)
+    Mtl.PiezoElectricity(Index).Set_mE(17, 0)
+
+    # '------- 磁石(Magneto) -------
+    Mtl.Magneto(Index).sM = 1.35
 
 # '////////////////////////////////////////////////////////////
 # '    Materialの設定 Material名：Air_Auto
@@ -387,7 +427,7 @@ def MakeModel(model):
     # '------- SetName -------
     BodyList[1].SetName("ボディ属性_002", "000_ネオジム磁石")
 
-    BodyList[2].SetName("ボディ属性_003", "000_ネオジム磁石")
+    BodyList[2].SetName("ボディ属性_003", "000_ネオジム磁石1")
 
     # '------- RingCopy -------
     Point3 = Dispatch(const.CGaudiPoint)
