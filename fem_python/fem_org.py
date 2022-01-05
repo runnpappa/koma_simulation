@@ -1,4 +1,5 @@
 from fem_excel import *
 from fem_graph import *
 
-HeatmapMain(False,True)
+GraphMain("dis","z",Mag=True)
+GraphMain("dis","x",C=2)

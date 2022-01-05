@@ -117,6 +117,7 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
         plt.xticks(yoko2)
     fig.savefig(
         "documents/tanaka/git_files/fem_python/python_graph/"+title+".png")
+    plt.clf()
 
 
 # k,Cには番号　kからCまでをひとつのグラフにする coord="x" or "y" or "z"
