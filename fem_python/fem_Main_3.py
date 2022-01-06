@@ -367,7 +367,7 @@ def MakeModel(model):
     # '------- CreateCylinder -------
     Point0 = Dispatch(const.CGaudiPoint)  # CGaudiPointクラスのインスタンス作成
     Point0.SetCoord(model["x"], model["y"], model["dis"] + model["Thick"])
-    tmpBody = Gaudi.CreateCylinder(Point0, model["R"], model["Thick"])
+    tmpBody = Gaudi.CreateCylinder(Point0, model["R"], 2)
     BodyList.append(tmpBody)  # リストに追加
 
     # '------- CreateCylinder -------

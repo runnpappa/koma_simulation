@@ -3,22 +3,46 @@ from fem_MagSize import model_size
 from fem_Main_2 import FemtetMain as Run
 from fem_Main_3 import FemtetMain as Run3
 
-def var_sub3(rad,mag_num,dis_from,dis_to=False):  #dis_to==Falseでdis_fromのみ解析
+
+def rad_height(rad_from, rad_to, RAD=True, HEIGHT=True):
     model = model_size()
-    model["rad"]=rad
-    model["mag_num"]=mag_num
-    i=dis_from
-    if dis_to==False:
-        j=dis_from
+    model["rad"] = rad_from
+    if RAD != True or HEIGHT != True:
+        Count.BackUpCount = False
+    if RAD != True:
+        model["rad"] = RAD
+        RAD = True
+    while model["rad"] <= rad_to:
+        if HEIGHT == True or HEIGHT == 40:
+            E2_org("dis")
+        model["dis"] = 40
+        if HEIGHT != True:
+            model["dis"] = HEIGHT
+            HEIGHT = True
+        while model["dis"] <= 100:
+            E2main(Run3(model), model, "dis")
+            model["dis"] += 5
+        E2_comment("dis", "rad"+str(model["rad"])+"mm")
+        model["rad"] += 1
+
+
+def var_sub3(rad, mag_num, dis_from, dis_to=False):  # dis_to==Falseでdis_fromのみ解析
+    model = model_size()
+    model["rad"] = rad
+    model["mag_num"] = mag_num
+    i = dis_from
+    if dis_to == False:
+        j = dis_from
     else:
-        j=dis_to
+        j = dis_to
     E2_org("dis")
-    while i<=j:
-        model["dis"]=i
+    while i <= j:
+        model["dis"] = i
         E2main(Run3(model), model, "dis")
-        i+=5
+        i += 5
     E2_comment("dis", "rad"+str(model["rad"])+"mm")
     E2_comment("dis", "mag_num"+str(model["mag_num"]))
+
 
 def rad_MagNum(rad_from, rad_to, MagNum_from, MagNum_to, RAD=True, MAG_NUM=True, HEIGHT=True):
     model = model_size()
@@ -47,8 +71,8 @@ def rad_MagNum(rad_from, rad_to, MagNum_from, MagNum_to, RAD=True, MAG_NUM=True,
             E2_comment("dis", "mag_num"+str(model["mag_num"]))
             model["rad"] += 1
         model["mag_num"] += 1
-        if model["mag_num"]>=9:
-            model["mesh"]=0.6
+        if model["mag_num"] >= 9:
+            model["mesh"] = 0.6
 
 
 def var_dis3(var, num, dis_from, dis_to, sub=False):
