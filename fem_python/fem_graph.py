@@ -7,7 +7,7 @@ wk = Workbook()
 model = model_size()
 
 
-# P!=Falseで p=P, q=C, P==Falseで Cに番号
+# P!=Falseで p=P, q=C, P==Falseで Cに番号, Mag=Trueでグラフに重さ表示, Dは分からん, coord="x" or "y" or "z"
 def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     if type(sheet) is str:
@@ -120,7 +120,7 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
     plt.clf()
 
 
-# k,Cには番号　kからCまでをひとつのグラフにする coord="x" or "y" or "z"
+# k,Cには番号　kからCまでをひとつのグラフにする, coord="x" or "y" or "z"
 def GraphMain2(sheet, k=1, C=1, coord="x"):
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     ws = wb[sheet]

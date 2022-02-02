@@ -11,7 +11,7 @@ class Count():
 
 
 class Workbook():
-    book = "documents/tanaka/git_files/fem_data/koma_sim3_py.xlsx"
+    book = "documents/tanaka/git_files/fem_data/koma_sim2_py.xlsx"
 
 
 check_model = model_size()
