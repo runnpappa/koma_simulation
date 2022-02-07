@@ -11,7 +11,7 @@ class Count():
 
 
 class Workbook():
-    book = "documents/tanaka/git_files/fem_data/koma_sim2_py.xlsx"
+    book = "documents/tanaka/git_files/fem_data/koma_sim3_py.xlsx"
 
 
 check_model = model_size()
@@ -517,10 +517,10 @@ def E3_heatmap_data(sheet, NULLDATA=False):  # ヒートマップ用ピボット
             i += 1
         i = 0
         q += 1
-    MainData["rad(mm)"] = Move_RadData
+    MainData["radius(mm)"] = Move_RadData
 
     MainData_pivot = pd.pivot_table(
-        data=MainData, values="Fz(N)", columns="rad(mm)", index="num")
+        data=MainData, values="Fz(N)", columns="radius(mm)", index="num")
     MainData_pivot.sort_index(ascending=False, inplace=True)
 
     return MainData_pivot

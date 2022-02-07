@@ -121,12 +121,16 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
 
 
 # k,Cには番号　kからCまでをひとつのグラフにする, coord="x" or "y" or "z"
-def GraphMain2(sheet, k=1, C=1, coord="x"):
+def GraphMain2(sheet, k=1, C=1, coord="x",square=False):
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     ws = wb[sheet]
 
-    fig = plt.figure(figsize=(10, 5))
+    if square==True:
+        fig = plt.figure(figsize=(10, 10))
+    else:
+        fig = plt.figure(figsize=(10, 5))
     colorlist = ["r", "g", "b", "c", "m", "y", "k"]
+    plt.rcParams["font.size"] = 18
     title = input("title:")
     plt.title(title)
     yoko = []
@@ -142,9 +146,9 @@ def GraphMain2(sheet, k=1, C=1, coord="x"):
         plt.xlabel("radius(mm)")
     elif sheet == "mag_num":
         plt.xlabel("num")
-    if coord == "Z":
+    if coord == "z":
         plt.ylabel("Fz(N)")
-    elif coord == "X":
+    elif coord == "x":
         plt.ylabel("Fx(N)")
     plt.grid(True)
     if sheet == "mag_num":
@@ -152,7 +156,7 @@ def GraphMain2(sheet, k=1, C=1, coord="x"):
     else:
         j = 0
         yoko2 = []
-        i = min(yoko)
+        i = yoko[0]
         while i <= max(yoko):
             yoko2.append(i)
             i += 10
@@ -172,6 +176,7 @@ def GraphMain2(sheet, k=1, C=1, coord="x"):
         j += 1
 
     plt.legend(loc="lower right", bbox_to_anchor=(1, 0))
+    plt.tight_layout()
     fig.savefig(
         "documents/tanaka/git_files/fem_python/python_graph/"+title+".png")
 
@@ -251,7 +256,7 @@ def GraphMain4(sheet, cals, coord="X"):  # calsにはリストで番号与える
     fig.savefig("documents/tanaka/git_files/python_graph/"+title+".png")
 
 
-def HeatmapMain(Title=False, NULLDATA=False):  # Title==Trueのときタイトル入力手動
+def HeatmapMain(Title=False, NULLDATA=False):  # Title==Trueのときタイトル入力手動, NULLDATA==Trueのときデータ全て0
     E3_heatmap_move("data_z")
     GraphMain3(E3_heatmap_data("heatmap_z", NULLDATA),
                Title, "heatmap_z", NULLDATA)
