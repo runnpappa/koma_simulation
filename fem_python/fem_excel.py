@@ -485,7 +485,7 @@ def E3_heatmap_data(sheet, NULLDATA=False):  # ヒートマップ用ピボット
     Move_MainData = []
     while not ws.cell(p, q).value is None:
         while not ws.cell(p, q).value is None:
-            if NULLDATA==True:
+            if NULLDATA == True:
                 Move_MainData.append(0)
             else:
                 Move_MainData.append(ws.cell(p, q).value)
@@ -654,6 +654,88 @@ def E3_heatmap_xz():  # X方向z方向考慮したヒートマップ用データ
     P = 3
     while not ws_xz.cell(P, Q).value is None:
         ws_xz.cell(P, Q-1).value = mag_num
+        mag_num += -1
+        P += 1
+
+    wb.save(wk.book)
+
+
+def E3_heatmap_remake(sheet="heatmap_xz"):
+    wb = openpyxl.load_workbook(wk.book)
+    ws = wb[sheet]
+
+    B_Data = []
+    p = 3
+    q = 13
+    Q = q
+    while not ws.cell(p, Q).value is None:
+        while Q >= 3:
+            B_Data.append(ws.cell(p, Q).value)
+            Q += -1
+        Q = q
+        p += 1
+
+    ws2 = wb["data_z2"]
+    L = 13
+    q = 1
+
+    weight = check_model["weight"]
+
+    for i in B_Data:
+        p = 2
+        find = False
+        if i == 0:
+            ws2.cell(L, q).value = i
+        else:
+            while not ws2.cell(p+1, q+3).value is None and find == False:
+                if ws2.cell(p, q+3).value < weight and ws2.cell(p+1, q+3).value > weight and ws2.cell(p, q).value <= i:
+                    ws2.cell(L, q).value = ws2.cell(p+1, q).value
+                    find = True
+                p += 1
+            if find == False:
+                ws2.cell(L, q).value = 40
+        q += 5
+
+    m = 13
+    n = 1
+    i = 0
+    move_data_z = [[]]
+    Mag = ws2.cell(m-2, n).value
+    while not ws2.cell(m, n).value is None:
+        if Mag != ws2.cell(m-2, n).value:
+            Mag = ws2.cell(m-2, n).value
+            move_data_z.append([])
+            i += 1
+        move_data_z[i].insert(0, ws2.cell(m, n).value)
+        n += 5
+    p = 3
+    q = 3
+
+    ws3 = wb["heatmap_z2"]
+
+    for i in move_data_z:
+        for j in i:
+            ws3.cell(p, q).value = j
+            q += 1
+        q = 3
+        p += 1
+    rad = 30
+    mag_num = 0
+    ws3.cell(1, 3).value = "rad"
+    ws3.cell(3, 1).value = "mag_num"
+    P = 3
+    Q = 3
+    while not ws3.cell(P, Q).value is None:
+        ws3.cell(P-1, Q).value = rad
+        rad += 1
+        Q += 1
+    Q = 3
+    while not ws3.cell(P, Q).value is None:
+        mag_num += 1
+        P += 1
+    P = 3
+    while not ws3.cell(P, Q).value is None:
+        ws3.cell(P, Q-1).value = mag_num
         mag_num += -1
         P += 1
 

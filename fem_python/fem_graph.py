@@ -121,11 +121,11 @@ def GraphMain(sheet, coord="z", P=False, C=1, D=False, Mag=False):
 
 
 # k,Cには番号　kからCまでをひとつのグラフにする, coord="x" or "y" or "z"
-def GraphMain2(sheet, k=1, C=1, coord="x",square=False):
+def GraphMain2(sheet, k=1, C=1, coord="x", square=False):
     wb = openpyxl.load_workbook(wk.book, data_only=True)
     ws = wb[sheet]
 
-    if square==True:
+    if square == True:
         fig = plt.figure(figsize=(10, 10))
     else:
         fig = plt.figure(figsize=(10, 5))
@@ -181,7 +181,7 @@ def GraphMain2(sheet, k=1, C=1, coord="x",square=False):
         "documents/tanaka/git_files/fem_python/python_graph/"+title+".png")
 
 
-def GraphMain3(Data, Title=False, sheet="heatmap_z", NULLDATA=False):  # HeatmapMain用
+def GraphMain3(Data, Title=False, sheet="heatmap_z", NULLDATA=False, XZ=False):  # HeatmapMain用
     if NULLDATA == True:
         i = False
     else:
@@ -191,7 +191,7 @@ def GraphMain3(Data, Title=False, sheet="heatmap_z", NULLDATA=False):  # Heatmap
     if Title == True:
         title = input("title:")
     else:
-        if sheet == "heatmap_z":
+        if sheet == "heatmap_z" or sheet == "heatmap_z2" and XZ == False:
             title = "Fz_stable_z"
         elif sheet == "heatmap_x":
             title = "Fx_stable_xy"
@@ -256,7 +256,8 @@ def GraphMain4(sheet, cals, coord="X"):  # calsにはリストで番号与える
     fig.savefig("documents/tanaka/git_files/python_graph/"+title+".png")
 
 
-def HeatmapMain(Title=False, NULLDATA=False):  # Title==Trueのときタイトル入力手動, NULLDATA==Trueのときデータ全て0
+# Title==Trueのときタイトル入力手動, NULLDATA==Trueのときデータ全て0
+def HeatmapMain(Title=False, NULLDATA=False):
     E3_heatmap_move("data_z")
     GraphMain3(E3_heatmap_data("heatmap_z", NULLDATA),
                Title, "heatmap_z", NULLDATA)
@@ -266,6 +267,15 @@ def HeatmapMain(Title=False, NULLDATA=False):  # Title==Trueのときタイト�
     E3_heatmap_xz()
     GraphMain3(E3_heatmap_data("heatmap_xz", NULLDATA),
                Title, "heatmap_xz", NULLDATA)
+
+
+def HeatmapMain2(Title=False):  # sheetのz方向の復元力がはたらき始める範囲を表示
+    E3_heatmap_remake("heatmap_z")
+    GraphMain3(E3_heatmap_data("heatmap_z2"),
+               Title, "heatmap_z2")
+    E3_heatmap_remake("heatmap_xz")
+    GraphMain3(E3_heatmap_data("heatmap_z2"),
+               Title, "heatmap_z2", XZ=True)
 
 
 def GraphMain5(sheet="data_z"):  # sheet内のデータを全てグラフ化
